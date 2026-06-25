@@ -42,7 +42,7 @@ const OFF = new Set(['QB', 'HB', 'FB', 'WR', 'TE', 'LT', 'LG', 'C', 'RG', 'RT'])
 const DEF = new Set(['LE', 'RE', 'DT', 'MLB', 'ROLB', 'LOLB', 'CB', 'FS', 'SS'])
 
 const playerRe =
-  /"firstName":"(.*?)","lastName":"(.*?)","number":(\d+),.*?"POS":"(.*?)","OVR":(\d+)/g
+  /"firstName":"(.*?)","lastName":"(.*?)","number":(\d+),.*?"POS":"(.*?)","OVR":(\d+),"playerProfile":\{[^}]*\},"SPD":(\d+)/g
 const teamRe = /"offenseOVR":(\d+),"defenseOVR":(\d+),"specialTeamsOVR":(\d+),"teamOVR":(\d+)/
 
 async function scrapeOne(name, id) {
@@ -59,11 +59,11 @@ async function scrapeOne(name, id) {
   const seen = new Set()
   const players = []
   for (const m of html.matchAll(playerRe)) {
-    const [, first, last, num, pos, ovr] = m
+    const [, first, last, num, pos, ovr, spd] = m
     const key = `${first} ${last} ${num} ${pos}`
     if (seen.has(key)) continue
     seen.add(key)
-    players.push({ name: `${first} ${last}`.trim(), pos, ovr: +ovr, num: +num })
+    players.push({ name: `${first} ${last}`.trim(), pos, ovr: +ovr, num: +num, spd: +spd })
   }
 
   const top = (set) =>
@@ -73,7 +73,25 @@ async function scrapeOne(name, id) {
       .slice(0, 5)
       .map(({ name, pos, ovr }) => ({ name, pos, ovr }))
 
-  return { ...team, topOffense: top(OFF), topDefense: top(DEF), playerCount: players.length }
+  const topSpeed = players
+    .slice()
+    .sort((a, b) => b.spd - a.spd || b.ovr - a.ovr || a.name.localeCompare(b.name))
+    .slice(0, 5)
+    .map(({ name, pos, spd }) => ({ name, pos, spd }))
+
+  const roster = players
+    .slice()
+    .sort((a, b) => b.ovr - a.ovr || a.name.localeCompare(b.name))
+    .map(({ name, pos, ovr, num }) => ({ name, pos, ovr, num }))
+
+  return {
+    ...team,
+    topOffense: top(OFF),
+    topDefense: top(DEF),
+    topSpeed,
+    roster,
+    playerCount: players.length,
+  }
 }
 
 async function run() {

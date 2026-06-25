@@ -1,6 +1,19 @@
+import { useEffect, useState } from 'react'
 import type { School, Player } from '../data/schools'
 import { readableText } from '../utils/wheel'
 import styles from './ResultModal.module.css'
+
+const POSITION_GROUPS: { label: string; pos: string[] }[] = [
+  { label: 'Quarterbacks', pos: ['QB'] },
+  { label: 'Running Backs', pos: ['HB', 'FB'] },
+  { label: 'Wide Receivers', pos: ['WR'] },
+  { label: 'Tight Ends', pos: ['TE'] },
+  { label: 'Offensive Line', pos: ['LT', 'LG', 'C', 'RG', 'RT'] },
+  { label: 'Defensive Line', pos: ['LE', 'RE', 'DT'] },
+  { label: 'Linebackers', pos: ['MLB', 'LOLB', 'ROLB'] },
+  { label: 'Secondary', pos: ['CB', 'FS', 'SS'] },
+  { label: 'Special Teams', pos: ['K', 'P', 'LS'] },
+]
 
 interface ResultModalProps {
   school: School | null
@@ -37,6 +50,8 @@ function Rating({ label, value }: { label: string; value: number }) {
 }
 
 export function ResultModal({ school, onClose, onRespin }: ResultModalProps) {
+  const [showFull, setShowFull] = useState(false)
+  useEffect(() => setShowFull(false), [school])
   if (!school) return null
   const txt = readableText(school.primaryColor)
 
@@ -61,39 +76,68 @@ export function ResultModal({ school, onClose, onRespin }: ResultModalProps) {
         </div>
 
         <div className={styles.body}>
-          <div className={styles.ovrRow}>
-            <div className={styles.ovrBig}>
-              <span>{school.ovr}</span>
-              <small>OVR</small>
-            </div>
-            <div className={styles.ratings}>
-              <Rating label="Offense" value={school.offOvr} />
-              <Rating label="Defense" value={school.defOvr} />
-            </div>
-          </div>
+          {showFull ? (
+            <FullRoster school={school} onBack={() => setShowFull(false)} />
+          ) : (
+            <>
+              <div className={styles.ovrRow}>
+                <div className={styles.ovrBig}>
+                  <span>{school.ovr}</span>
+                  <small>OVR</small>
+                </div>
+                <div className={styles.ratings}>
+                  <Rating label="Offense" value={school.offOvr} />
+                  <Rating label="Defense" value={school.defOvr} />
+                </div>
+              </div>
 
-          <div className={styles.facts}>
-            <Fact k="Conference" v={school.conference} />
-            <Fact k="State" v={school.state} />
-            <Fact k="Stadium" v={school.stadium} />
-            <Fact k="Mascot" v={school.mascot} />
-          </div>
+              <div className={styles.facts}>
+                <Fact k="Conference" v={school.conference} />
+                <Fact k="State" v={school.state} />
+                <Fact k="Stadium" v={school.stadium} />
+                <Fact k="Mascot" v={school.mascot} />
+              </div>
 
-          <div className={styles.rivals}>
-            <span className={styles.rivalLabel}>Rivals</span>
-            <div className={styles.rivalChips}>
-              {school.rivals.map((r) => (
-                <span key={r} className={styles.rivalChip}>
-                  {r}
-                </span>
-              ))}
-            </div>
-          </div>
+              <div className={styles.rivals}>
+                <span className={styles.rivalLabel}>Rivals</span>
+                <div className={styles.rivalChips}>
+                  {school.rivals.map((r) => (
+                    <span key={r} className={styles.rivalChip}>
+                      {r}
+                    </span>
+                  ))}
+                </div>
+              </div>
 
-          <div className={styles.rosters}>
-            <RosterCol title="Top offense" players={school.topOffense} />
-            <RosterCol title="Top defense" players={school.topDefense} />
-          </div>
+              <div className={styles.rosters}>
+                <RosterCol title="Top offense" players={school.topOffense} />
+                <RosterCol title="Top defense" players={school.topDefense} />
+              </div>
+
+              {school.topSpeed.length > 0 && (
+                <div className={styles.roster}>
+                  <span className={styles.rosterTitle}>Fastest players</span>
+                  <ul className={styles.rosterList}>
+                    {school.topSpeed.map((p) => (
+                      <li key={`${p.name}-${p.pos}`} className={styles.player}>
+                        <span className={styles.playerPos}>{p.pos}</span>
+                        <span className={styles.playerName}>{p.name}</span>
+                        <span className={styles.playerSpd}>
+                          {p.spd} <small>SPD</small>
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {school.roster.length > 0 && (
+                <button className={styles.fullToggle} onClick={() => setShowFull(true)}>
+                  View full roster ratings · {school.roster.length} players ›
+                </button>
+              )}
+            </>
+          )}
 
           <div className={styles.actions}>
             <button className={styles.respin} onClick={onRespin}>
@@ -104,6 +148,43 @@ export function ResultModal({ school, onClose, onRespin }: ResultModalProps) {
             </button>
           </div>
         </div>
+      </div>
+    </div>
+  )
+}
+
+function FullRoster({ school, onBack }: { school: School; onBack: () => void }) {
+  return (
+    <div className={styles.full}>
+      <div className={styles.fullHead}>
+        <button className={styles.backBtn} onClick={onBack}>
+          ‹ Summary
+        </button>
+        <span className={styles.fullTitle}>{school.name} — full roster</span>
+      </div>
+      <div className={styles.fullScroll}>
+        {POSITION_GROUPS.map((g) => {
+          const players = school.roster.filter((p) => g.pos.includes(p.pos))
+          if (players.length === 0) return null
+          return (
+            <div key={g.label} className={styles.group}>
+              <div className={styles.groupHead}>
+                <span>{g.label}</span>
+                <span className={styles.groupCount}>{players.length}</span>
+              </div>
+              <ul className={styles.rosterList}>
+                {players.map((p) => (
+                  <li key={`${p.name}-${p.num}`} className={styles.player}>
+                    <span className={styles.playerNum}>#{p.num}</span>
+                    <span className={styles.playerPos}>{p.pos}</span>
+                    <span className={styles.playerName}>{p.name}</span>
+                    <span className={styles.playerOvr}>{p.ovr}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )
+        })}
       </div>
     </div>
   )

@@ -300,6 +300,117 @@
   flex-shrink: 0;
 }
 
+.playerSpd {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1a7f37;
+  flex-shrink: 0;
+}
+
+.playerSpd small {
+  font-size: 9px;
+  font-weight: 600;
+  opacity: 0.7;
+}
+
+.fullToggle {
+  width: 100%;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 11px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--accent);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.fullToggle:hover {
+  border-color: var(--accent);
+  background: var(--bg-alt);
+}
+
+/* ===== full roster view ===== */
+.full {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.fullHead {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.backBtn {
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-radius: 980px;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--accent);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.backBtn:hover {
+  border-color: var(--accent);
+}
+
+.fullTitle {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fullScroll {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-height: 46vh;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.groupHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--ink-soft);
+  font-weight: 700;
+  position: sticky;
+  top: 0;
+  background: #fff;
+  padding: 2px 0;
+}
+
+.groupCount {
+  color: var(--accent);
+}
+
+.playerNum {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  min-width: 28px;
+  flex-shrink: 0;
+}
+
 .actions {
   display: flex;
   gap: 10px;

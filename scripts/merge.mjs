@@ -20,6 +20,8 @@ for (const s of schools) {
     missing.push(s.name)
     s.topOffense = []
     s.topDefense = []
+    s.topSpeed = []
+    s.roster = []
     continue
   }
   s.ovr = p.ovr
@@ -27,24 +29,36 @@ for (const s of schools) {
   s.defOvr = p.defOvr
   s.topOffense = p.topOffense
   s.topDefense = p.topDefense
+  s.topSpeed = p.topSpeed
+  s.roster = p.roster
 }
 if (missing.length) console.log('NO PLAYER DATA:', missing.join(', '))
 
 const FIELD_ORDER = [
   'name', 'abbr', 'conference', 'stars', 'ovr', 'offOvr', 'defOvr',
   'primaryColor', 'secondaryColor', 'state', 'stadium', 'rivals', 'mascot',
-  'topOffense', 'topDefense',
+  'topOffense', 'topDefense', 'topSpeed', 'roster',
 ]
 
 const j = (v) => JSON.stringify(v)
 const plist = (arr) =>
   '[' + arr.map((p) => `{ name: ${j(p.name)}, pos: ${j(p.pos)}, ovr: ${p.ovr} }`).join(', ') + ']'
+const slist = (arr) =>
+  '[' + arr.map((p) => `{ name: ${j(p.name)}, pos: ${j(p.pos)}, spd: ${p.spd} }`).join(', ') + ']'
+const rlist = (arr) =>
+  '[\n' +
+  arr
+    .map((p) => `      { name: ${j(p.name)}, pos: ${j(p.pos)}, ovr: ${p.ovr}, num: ${p.num} }`)
+    .join(',\n') +
+  '\n    ]'
 
 function emitSchool(s) {
   const parts = []
   for (const k of FIELD_ORDER) {
     if (k === 'rivals') parts.push(`rivals: [${s.rivals.map(j).join(', ')}]`)
     else if (k === 'topOffense' || k === 'topDefense') parts.push(`${k}: ${plist(s[k])}`)
+    else if (k === 'topSpeed') parts.push(`topSpeed: ${slist(s[k])}`)
+    else if (k === 'roster') parts.push(`roster: ${rlist(s[k])}`)
     else parts.push(`${k}: ${j(s[k])}`)
   }
   return `  {\n    ${parts.join(',\n    ')},\n  }`
@@ -53,7 +67,9 @@ function emitSchool(s) {
 const header = `export interface Player {
   name: string
   pos: string
-  ovr: number
+  ovr?: number
+  num?: number
+  spd?: number
 }
 
 export interface School {
@@ -72,6 +88,8 @@ export interface School {
   mascot: string
   topOffense: Player[]
   topDefense: Player[]
+  topSpeed: Player[]
+  roster: Player[]
 }
 
 // Team ratings and rosters sourced from teamcrafters.net CFB 27 launch ratings.
