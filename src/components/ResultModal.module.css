@@ -1,0 +1,338 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 50;
+  animation: fade 0.18s ease;
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+
+.modal {
+  width: min(440px, 94vw);
+  background: #fff;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.28);
+  animation: pop 0.26s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+  position: relative;
+}
+
+@keyframes pop {
+  from {
+    transform: scale(0.86) translateY(12px);
+    opacity: 0;
+  }
+}
+
+.close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(255, 255, 255, 0.55);
+  border: none;
+  color: #1d1d1f;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.close:hover {
+  background: rgba(255, 255, 255, 0.85);
+}
+
+.banner {
+  padding: 30px 24px 24px;
+  text-align: center;
+}
+
+.bannerTag {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  font-weight: 600;
+  opacity: 0.85;
+}
+
+.bannerName {
+  margin: 8px 0 2px;
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+}
+
+.bannerMascot {
+  font-size: 16px;
+  font-weight: 500;
+  opacity: 0.9;
+  margin-bottom: 10px;
+}
+
+.stars {
+  font-size: 22px;
+  letter-spacing: 2px;
+}
+
+.starFull {
+  color: #ffd34d;
+}
+
+.starHalf {
+  color: #ffd34d;
+  opacity: 0.55;
+}
+
+.starEmpty {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.body {
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.ovrRow {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.ovrBig {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  border-radius: 16px;
+  background: var(--accent);
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.ovrBig span {
+  font-size: 34px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.ovrBig small {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.ratings {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ratingBar {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--bg-alt);
+  overflow: hidden;
+}
+
+.ratingFill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--accent);
+}
+
+.ratingMeta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: var(--ink-soft);
+  margin-top: 5px;
+}
+
+.ratingMeta strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.fact {
+  background: var(--bg-alt);
+  border-radius: 12px;
+  padding: 11px 13px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.factK {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--ink-soft);
+  font-weight: 600;
+}
+
+.factV {
+  font-size: 14px;
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.rivals {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.rivalLabel {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--ink-soft);
+  font-weight: 600;
+}
+
+.rivalChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.rivalChip {
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  border-radius: 999px;
+  padding: 5px 12px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.rosters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.roster {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.rosterTitle {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--ink-soft);
+  font-weight: 600;
+}
+
+.rosterList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.player {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: var(--bg-alt);
+  border-radius: 9px;
+  padding: 6px 8px;
+}
+
+.playerPos {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--ink-soft);
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  padding: 2px 4px;
+  min-width: 30px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.playerName {
+  flex: 1;
+  min-width: 0;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.playerOvr {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.respin,
+.lock {
+  flex: 1;
+  border-radius: 980px;
+  padding: 12px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.respin {
+  background: #fff;
+  border-color: var(--line);
+  color: var(--accent);
+}
+
+.respin:hover {
+  border-color: var(--accent);
+}
+
+.lock {
+  background: var(--accent);
+  color: #fff;
+}
+
+.lock:hover {
+  background: var(--accent-hover);
+}

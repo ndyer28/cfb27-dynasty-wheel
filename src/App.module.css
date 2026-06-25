@@ -1,0 +1,164 @@
+.app {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 28px 24px 80px;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 6px;
+  padding: 36px 0 40px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--line);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.logo {
+  font-size: 40px;
+}
+
+.brand h1 {
+  margin: 0;
+  font-size: 44px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  line-height: 1.05;
+}
+
+.brand p {
+  margin: 4px 0 0;
+  font-size: 17px;
+  font-weight: 400;
+  color: var(--ink-soft);
+  text-align: left;
+}
+
+.headerStat span {
+  color: var(--ink-soft);
+}
+
+.headerStat {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 19px;
+  color: var(--ink-soft);
+  font-weight: 500;
+}
+
+.headerStat strong {
+  font-size: 21px;
+  color: var(--ink);
+  font-weight: 600;
+  line-height: 1;
+}
+
+.headerStat span {
+  font-size: 19px;
+  text-transform: none;
+  letter-spacing: -0.01em;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 300px 1fr 280px;
+  gap: 28px;
+  align-items: start;
+}
+
+.stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  padding: 24px 0;
+}
+
+.spinBtn {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 980px;
+  padding: 14px 40px;
+  font-size: 17px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.spinBtn:hover:not(:disabled) {
+  background: var(--accent-hover);
+}
+
+.spinBtn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.spinBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.reopen {
+  background: transparent;
+  border: none;
+  color: var(--accent);
+  font-size: 15px;
+  font-weight: 400;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
+.reopen:hover {
+  text-decoration: underline;
+}
+
+.empty {
+  width: min(520px, 86vw);
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 10px;
+  border: 2px dashed var(--line);
+  border-radius: 50%;
+  padding: 30px;
+}
+
+.empty h3 {
+  margin: 0;
+  color: var(--ink);
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.empty p {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 15px;
+  max-width: 280px;
+}
+
+@media (max-width: 1080px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+  .stage {
+    order: -1;
+  }
+  .brand h1 {
+    font-size: 34px;
+  }
+}

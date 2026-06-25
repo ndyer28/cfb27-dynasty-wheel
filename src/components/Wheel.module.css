@@ -1,0 +1,52 @@
+.wheelWrap {
+  position: relative;
+  width: min(520px, 86vw);
+  aspect-ratio: 1;
+  margin: 0 auto;
+  filter: drop-shadow(0 12px 36px rgba(0, 0, 0, 0.16));
+}
+
+.wheel {
+  width: 100%;
+  height: 100%;
+  display: block;
+  transform-origin: 50% 50%;
+}
+
+.rim {
+  fill: none;
+  stroke: #ffffff;
+  stroke-width: 10;
+}
+
+.hub {
+  fill: #ffffff;
+}
+
+.hubRing {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 3;
+}
+
+.hubText {
+  fill: var(--accent);
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+/* Pointer sits at 12 o'clock pointing down into the wheel. */
+.pointer {
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 16px solid transparent;
+  border-right: 16px solid transparent;
+  border-top: 28px solid var(--accent);
+  z-index: 5;
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.25));
+}
