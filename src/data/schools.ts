@@ -3849,7 +3849,7 @@ export const SCHOOLS: School[] = [
   {
     name: "Notre Dame",
     abbr: "ND",
-    conference: "ACC",
+    conference: "Independent",
     stars: 5,
     ovr: 89,
     offOvr: 88,
@@ -8937,7 +8937,7 @@ export const SCHOOLS: School[] = [
   {
     name: "Liberty",
     abbr: "LIB",
-    conference: "Conference USA",
+    conference: "CUSA",
     stars: 1.5,
     ovr: 76,
     offOvr: 77,
@@ -9043,7 +9043,7 @@ export const SCHOOLS: School[] = [
   {
     name: "Jacksonville State",
     abbr: "JVST",
-    conference: "Conference USA",
+    conference: "CUSA",
     stars: 1,
     ovr: 76,
     offOvr: 76,
@@ -9149,7 +9149,7 @@ export const SCHOOLS: School[] = [
   {
     name: "Western Kentucky",
     abbr: "WKU",
-    conference: "Conference USA",
+    conference: "CUSA",
     stars: 2,
     ovr: 73,
     offOvr: 75,
@@ -9255,7 +9255,7 @@ export const SCHOOLS: School[] = [
   {
     name: "Middle Tennessee",
     abbr: "MTSU",
-    conference: "Conference USA",
+    conference: "CUSA",
     stars: 1.5,
     ovr: 72,
     offOvr: 73,
@@ -9361,7 +9361,7 @@ export const SCHOOLS: School[] = [
   {
     name: "Louisiana Tech",
     abbr: "LT",
-    conference: "Conference USA",
+    conference: "Sun Belt",
     stars: 1.5,
     ovr: 74,
     offOvr: 76,
@@ -9467,7 +9467,7 @@ export const SCHOOLS: School[] = [
   {
     name: "Sam Houston",
     abbr: "SHSU",
-    conference: "Conference USA",
+    conference: "CUSA",
     stars: 1.5,
     ovr: 71,
     offOvr: 72,
@@ -9573,7 +9573,7 @@ export const SCHOOLS: School[] = [
   {
     name: "FIU",
     abbr: "FIU",
-    conference: "Conference USA",
+    conference: "CUSA",
     stars: 1.5,
     ovr: 73,
     offOvr: 73,
@@ -9679,7 +9679,7 @@ export const SCHOOLS: School[] = [
   {
     name: "UTEP",
     abbr: "UTEP",
-    conference: "Conference USA",
+    conference: "Mountain West",
     stars: 1.5,
     ovr: 72,
     offOvr: 73,
@@ -9785,7 +9785,7 @@ export const SCHOOLS: School[] = [
   {
     name: "New Mexico State",
     abbr: "NMSU",
-    conference: "Conference USA",
+    conference: "CUSA",
     stars: 1,
     ovr: 73,
     offOvr: 71,
@@ -9891,7 +9891,7 @@ export const SCHOOLS: School[] = [
   {
     name: "Kennesaw State",
     abbr: "KENN",
-    conference: "Conference USA",
+    conference: "CUSA",
     stars: 1,
     ovr: 75,
     offOvr: 73,
@@ -10421,7 +10421,7 @@ export const SCHOOLS: School[] = [
   {
     name: "Northern Illinois",
     abbr: "NIU",
-    conference: "MAC",
+    conference: "Mountain West",
     stars: 1.5,
     ovr: 70,
     offOvr: 72,
@@ -11269,7 +11269,7 @@ export const SCHOOLS: School[] = [
   {
     name: "UMass",
     abbr: "UMAS",
-    conference: "MAC",
+    conference: "Independent",
     stars: 1.5,
     ovr: 71,
     offOvr: 71,
@@ -11375,7 +11375,7 @@ export const SCHOOLS: School[] = [
   {
     name: "Boise State",
     abbr: "BSU",
-    conference: "Mountain West",
+    conference: "Pac-12",
     stars: 2.5,
     ovr: 80,
     offOvr: 82,
@@ -11481,7 +11481,7 @@ export const SCHOOLS: School[] = [
   {
     name: "Fresno State",
     abbr: "FRES",
-    conference: "Mountain West",
+    conference: "Pac-12",
     stars: 2.5,
     ovr: 76,
     offOvr: 76,
@@ -11799,7 +11799,7 @@ export const SCHOOLS: School[] = [
   {
     name: "Colorado State",
     abbr: "CSU",
-    conference: "Mountain West",
+    conference: "Pac-12",
     stars: 1.5,
     ovr: 74,
     offOvr: 73,
@@ -11905,7 +11905,7 @@ export const SCHOOLS: School[] = [
   {
     name: "San Diego State",
     abbr: "SDSU",
-    conference: "Mountain West",
+    conference: "Pac-12",
     stars: 2,
     ovr: 77,
     offOvr: 78,
@@ -12011,7 +12011,7 @@ export const SCHOOLS: School[] = [
   {
     name: "Utah State",
     abbr: "USU",
-    conference: "Mountain West",
+    conference: "Pac-12",
     stars: 2,
     ovr: 76,
     offOvr: 76,
@@ -13071,7 +13071,7 @@ export const SCHOOLS: School[] = [
   {
     name: "Texas State",
     abbr: "TXST",
-    conference: "Sun Belt",
+    conference: "Pac-12",
     stars: 1.5,
     ovr: 77,
     offOvr: 78,

@@ -69,6 +69,8 @@ async function scrapeOne(name, id) {
     ? { offOvr: +tm[1], defOvr: +tm[2], stOvr: +tm[3], ovr: +tm[4] }
     : { offOvr: 0, defOvr: 0, stOvr: 0, ovr: 0 }
 
+  const conf = (html.match(/"conference":\{[^}]*?"name":"(.*?)"/) || [])[1] || null
+
   const seen = new Set()
   const players = []
   for (const m of html.matchAll(playerRe)) {
@@ -105,6 +107,7 @@ async function scrapeOne(name, id) {
 
   return {
     ...team,
+    conference: conf,
     outlook,
     topOffense: top(OFF),
     topDefense: top(DEF),

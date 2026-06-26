@@ -26,6 +26,7 @@ for (const s of schools) {
     s.roster = s.roster || []
     continue
   }
+  if (p.conference) s.conference = p.conference // authoritative 2026 alignment
   s.ovr = p.ovr
   s.offOvr = p.offOvr
   s.defOvr = p.defOvr

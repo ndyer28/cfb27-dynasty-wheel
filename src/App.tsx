@@ -114,7 +114,7 @@ export default function App() {
     {
       label: 'Group of 5 grind',
       apply: () => {
-        setConferences(new Set(['American', 'Conference USA', 'MAC', 'Mountain West', 'Sun Belt', 'Pac-12', 'Independent']))
+        setConferences(new Set(['American', 'CUSA', 'MAC', 'Mountain West', 'Sun Belt', 'Pac-12', 'Independent']))
         setMinStars(0.5)
         setMaxStars(5)
         setSearch('')
