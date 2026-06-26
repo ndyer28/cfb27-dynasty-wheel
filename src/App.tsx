@@ -5,6 +5,7 @@ import { Wheel } from './components/Wheel'
 import { FilterPanel, type Preset } from './components/FilterPanel'
 import { ResultModal } from './components/ResultModal'
 import { HistoryList, type HistoryEntry } from './components/HistoryList'
+import { BrowsePanel } from './components/BrowsePanel'
 import styles from './App.module.css'
 
 const SPIN_MS = 5200
@@ -217,6 +218,13 @@ export default function App() {
           onClear={() => setHistory([])}
         />
       </main>
+
+      <BrowsePanel
+        onPick={(s) => {
+          setWinner(s)
+          setModalOpen(true)
+        }}
+      />
 
       {modalOpen && (
         <ResultModal

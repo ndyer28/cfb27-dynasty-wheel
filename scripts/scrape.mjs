@@ -41,8 +41,12 @@ const IDS = {
 const OFF = new Set(['QB', 'HB', 'FB', 'WR', 'TE', 'LT', 'LG', 'C', 'RG', 'RT'])
 const DEF = new Set(['LE', 'RE', 'DT', 'MLB', 'ROLB', 'LOLB', 'CB', 'FS', 'SS'])
 
+// group4 = the chunk between number and POS (holds "class" when present)
 const playerRe =
-  /"firstName":"(.*?)","lastName":"(.*?)","number":(\d+),.*?"POS":"(.*?)","OVR":(\d+),.*?"SPD":(\d+)/g
+  /"firstName":"(.*?)","lastName":"(.*?)","number":(\d+),(.*?)"POS":"(.*?)","OVR":(\d+),.*?"SPD":(\d+)/g
+
+// Players still on the roster over the next two seasons (2-year outlook).
+const YOUNG = new Set(['Freshman', 'Sophomore'])
 const teamRe = /"offenseOVR":(\d+),"defenseOVR":(\d+),"specialTeamsOVR":(\d+),"teamOVR":(\d+)/
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
@@ -68,12 +72,18 @@ async function scrapeOne(name, id) {
   const seen = new Set()
   const players = []
   for (const m of html.matchAll(playerRe)) {
-    const [, first, last, num, pos, ovr, spd] = m
+    const [, first, last, num, middle, pos, ovr, spd] = m
     const key = `${first} ${last} ${num} ${pos}`
     if (seen.has(key)) continue
     seen.add(key)
-    players.push({ name: `${first} ${last}`.trim(), pos, ovr: +ovr, num: +num, spd: +spd })
+    const cls = (middle.match(/"class":"(.*?)"/) || [])[1] || 'Senior'
+    players.push({ name: `${first} ${last}`.trim(), pos, ovr: +ovr, num: +num, spd: +spd, cls })
   }
+
+  // 2-year roster outlook: share of total OVR from players who remain (Fr/So).
+  const totalOvr = players.reduce((s, p) => s + p.ovr, 0)
+  const youngOvr = players.filter((p) => YOUNG.has(p.cls)).reduce((s, p) => s + p.ovr, 0)
+  const outlook = totalOvr ? Math.round((youngOvr / totalOvr) * 100) : 0
 
   const top = (set) =>
     players
@@ -95,6 +105,7 @@ async function scrapeOne(name, id) {
 
   return {
     ...team,
+    outlook,
     topOffense: top(OFF),
     topDefense: top(DEF),
     topSpeed,

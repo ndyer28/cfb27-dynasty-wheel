@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import type { School, Player } from '../data/schools'
 import { readableText } from '../utils/wheel'
+import { rebuildDifficulty } from '../utils/rebuild'
 import styles from './ResultModal.module.css'
 
 const POSITION_GROUPS: { label: string; pos: string[] }[] = [
@@ -91,6 +92,8 @@ export function ResultModal({ school, onClose, onRespin }: ResultModalProps) {
                 </div>
               </div>
 
+              <RebuildMeter school={school} />
+
               <div className={styles.facts}>
                 <Fact k="Conference" v={school.conference} />
                 <Fact k="State" v={school.state} />
@@ -148,6 +151,36 @@ export function ResultModal({ school, onClose, onRespin }: ResultModalProps) {
             </button>
           </div>
         </div>
+      </div>
+    </div>
+  )
+}
+
+function RebuildMeter({ school }: { school: School }) {
+  const r = rebuildDifficulty(school)
+  return (
+    <div className={styles.rebuild}>
+      <div className={styles.rebuildHead}>
+        <span className={styles.rebuildLabel}>Rebuild difficulty</span>
+        <span className={styles.rebuildTier} style={{ color: r.color }}>
+          {r.label}
+        </span>
+      </div>
+      <div className={styles.pips}>
+        {Array.from({ length: 5 }).map((_, i) => (
+          <span
+            key={i}
+            className={styles.pip}
+            style={{ background: i < r.level ? r.color : 'var(--bg-alt)' }}
+          />
+        ))}
+      </div>
+      <div className={styles.rebuildMeta}>
+        <span>2-yr outlook {school.outlook}% returning</span>
+        <span>·</span>
+        <span>{school.ovr} OVR</span>
+        <span>·</span>
+        <span>{school.stars}★</span>
       </div>
     </div>
   )

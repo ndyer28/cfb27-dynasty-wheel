@@ -19,6 +19,7 @@ for (const s of schools) {
   if (!p) {
     // Preserve any existing data; only ensure new fields exist.
     missing.push(s.name)
+    s.outlook = s.outlook ?? 50
     s.topOffense = s.topOffense || []
     s.topDefense = s.topDefense || []
     s.topSpeed = s.topSpeed || []
@@ -28,6 +29,7 @@ for (const s of schools) {
   s.ovr = p.ovr
   s.offOvr = p.offOvr
   s.defOvr = p.defOvr
+  s.outlook = p.outlook
   s.topOffense = p.topOffense
   s.topDefense = p.topDefense
   s.topSpeed = p.topSpeed
@@ -36,7 +38,7 @@ for (const s of schools) {
 if (missing.length) console.log('NO PLAYER DATA:', missing.join(', '))
 
 const FIELD_ORDER = [
-  'name', 'abbr', 'conference', 'stars', 'ovr', 'offOvr', 'defOvr',
+  'name', 'abbr', 'conference', 'stars', 'ovr', 'offOvr', 'defOvr', 'outlook',
   'primaryColor', 'secondaryColor', 'state', 'stadium', 'rivals', 'mascot',
   'topOffense', 'topDefense', 'topSpeed', 'roster',
 ]
@@ -81,6 +83,7 @@ export interface School {
   ovr: number
   offOvr: number
   defOvr: number
+  outlook: number
   primaryColor: string
   secondaryColor: string
   state: string
