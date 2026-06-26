@@ -27,11 +27,12 @@
 
 .brand h1 {
   margin: 0;
-  font-size: 44px;
+  font-size: 52px;
   font-weight: 700;
-  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
   color: var(--ink);
-  line-height: 1.05;
+  line-height: 0.95;
 }
 
 .brand p {
@@ -56,9 +57,10 @@
 }
 
 .headerStat strong {
-  font-size: 21px;
+  font-family: var(--font-display);
+  font-size: 24px;
   color: var(--ink);
-  font-weight: 600;
+  font-weight: 700;
   line-height: 1;
 }
 
