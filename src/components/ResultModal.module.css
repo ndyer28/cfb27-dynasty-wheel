@@ -308,6 +308,15 @@
   flex-shrink: 0;
 }
 
+.clickable {
+  cursor: pointer;
+  transition: background 0.12s;
+}
+
+.clickable:hover {
+  background: #eef1f6;
+}
+
 .playerYr {
   font-size: 10px;
   font-weight: 600;

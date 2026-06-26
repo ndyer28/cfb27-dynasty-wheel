@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import type { School, Player } from '../data/schools'
 import { readableText } from '../utils/wheel'
 import { rebuildDifficulty } from '../utils/rebuild'
+import { PlayerModal } from './PlayerModal'
 import styles from './ResultModal.module.css'
 
 const POSITION_GROUPS: { label: string; pos: string[] }[] = [
@@ -52,9 +53,14 @@ function Rating({ label, value }: { label: string; value: number }) {
 
 export function ResultModal({ school, onClose, onRespin }: ResultModalProps) {
   const [showFull, setShowFull] = useState(false)
-  useEffect(() => setShowFull(false), [school])
+  const [playerPid, setPlayerPid] = useState<number | null>(null)
+  useEffect(() => {
+    setShowFull(false)
+    setPlayerPid(null)
+  }, [school])
   if (!school) return null
   const txt = readableText(school.primaryColor)
+  const openPlayer = (pid?: number) => pid != null && setPlayerPid(pid)
 
   return (
     <div className={styles.backdrop} onClick={onClose}>
@@ -78,7 +84,7 @@ export function ResultModal({ school, onClose, onRespin }: ResultModalProps) {
 
         <div className={styles.body}>
           {showFull ? (
-            <FullRoster school={school} onBack={() => setShowFull(false)} />
+            <FullRoster school={school} onBack={() => setShowFull(false)} onPlayer={openPlayer} />
           ) : (
             <>
               <div className={styles.ovrRow}>
@@ -113,8 +119,8 @@ export function ResultModal({ school, onClose, onRespin }: ResultModalProps) {
               </div>
 
               <div className={styles.rosters}>
-                <RosterCol title="Top offense" players={school.topOffense} />
-                <RosterCol title="Top defense" players={school.topDefense} />
+                <RosterCol title="Top offense" players={school.topOffense} onPlayer={openPlayer} />
+                <RosterCol title="Top defense" players={school.topDefense} onPlayer={openPlayer} />
               </div>
 
               {school.topSpeed.length > 0 && (
@@ -122,7 +128,11 @@ export function ResultModal({ school, onClose, onRespin }: ResultModalProps) {
                   <span className={styles.rosterTitle}>Fastest players</span>
                   <ul className={styles.rosterList}>
                     {school.topSpeed.map((p) => (
-                      <li key={`${p.name}-${p.pos}`} className={styles.player}>
+                      <li
+                        key={`${p.name}-${p.pos}`}
+                        className={`${styles.player} ${styles.clickable}`}
+                        onClick={() => openPlayer(p.pid)}
+                      >
                         <span className={styles.playerPos}>{p.pos}</span>
                         <span className={styles.playerName}>{p.name}</span>
                         <span className={styles.playerYr}>{p.yr}</span>
@@ -153,6 +163,8 @@ export function ResultModal({ school, onClose, onRespin }: ResultModalProps) {
           </div>
         </div>
       </div>
+
+      <PlayerModal pid={playerPid} accent={school.primaryColor} onClose={() => setPlayerPid(null)} />
     </div>
   )
 }
@@ -187,7 +199,15 @@ function RebuildMeter({ school }: { school: School }) {
   )
 }
 
-function FullRoster({ school, onBack }: { school: School; onBack: () => void }) {
+function FullRoster({
+  school,
+  onBack,
+  onPlayer,
+}: {
+  school: School
+  onBack: () => void
+  onPlayer: (pid?: number) => void
+}) {
   return (
     <div className={styles.full}>
       <div className={styles.fullHead}>
@@ -208,7 +228,11 @@ function FullRoster({ school, onBack }: { school: School; onBack: () => void }) 
               </div>
               <ul className={styles.rosterList}>
                 {players.map((p) => (
-                  <li key={`${p.name}-${p.num}`} className={styles.player}>
+                  <li
+                    key={`${p.name}-${p.num}`}
+                    className={`${styles.player} ${styles.clickable}`}
+                    onClick={() => onPlayer(p.pid)}
+                  >
                     <span className={styles.playerNum}>#{p.num}</span>
                     <span className={styles.playerPos}>{p.pos}</span>
                     <span className={styles.playerName}>{p.name}</span>
@@ -225,13 +249,25 @@ function FullRoster({ school, onBack }: { school: School; onBack: () => void }) 
   )
 }
 
-function RosterCol({ title, players }: { title: string; players: Player[] }) {
+function RosterCol({
+  title,
+  players,
+  onPlayer,
+}: {
+  title: string
+  players: Player[]
+  onPlayer: (pid?: number) => void
+}) {
   return (
     <div className={styles.roster}>
       <span className={styles.rosterTitle}>{title}</span>
       <ul className={styles.rosterList}>
         {players.map((p) => (
-          <li key={`${p.name}-${p.pos}`} className={styles.player}>
+          <li
+            key={`${p.name}-${p.pos}`}
+            className={`${styles.player} ${styles.clickable}`}
+            onClick={() => onPlayer(p.pid)}
+          >
             <span className={styles.playerPos}>{p.pos}</span>
             <span className={styles.playerName}>{p.name}</span>
             <span className={styles.playerYr}>{p.yr}</span>

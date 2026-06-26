@@ -1,0 +1,199 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  z-index: 60;
+  animation: fade 0.16s ease;
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+
+.modal {
+  width: min(720px, 96vw);
+  max-height: 92dvh;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.32);
+  animation: pop 0.22s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+  position: relative;
+}
+
+@keyframes pop {
+  from {
+    transform: scale(0.9) translateY(10px);
+    opacity: 0;
+  }
+}
+
+.close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(255, 255, 255, 0.5);
+  border: none;
+  color: #1d1d1f;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.close:hover {
+  background: rgba(255, 255, 255, 0.85);
+}
+
+.loading {
+  padding: 80px 24px;
+  text-align: center;
+  color: var(--ink-soft);
+  font-size: 15px;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 22px 24px;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.ovrBadge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 76px;
+  height: 76px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.18);
+  border: 1.5px solid rgba(255, 255, 255, 0.45);
+  flex-shrink: 0;
+}
+
+.ovrBadge span {
+  font-size: 32px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.ovrBadge small {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  opacity: 0.9;
+}
+
+.headInfo {
+  min-width: 0;
+}
+
+.posTag {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  opacity: 0.9;
+}
+
+.name {
+  margin: 3px 0 4px;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+}
+
+.bio {
+  font-size: 13px;
+  font-weight: 500;
+  opacity: 0.92;
+}
+
+.body {
+  padding: 20px 24px 24px;
+  overflow-y: auto;
+  flex: 1 1 auto;
+  min-height: 0;
+  -webkit-overflow-scrolling: touch;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 28px;
+  align-content: start;
+}
+
+.group {
+  break-inside: avoid;
+  margin-bottom: 8px;
+}
+
+.groupTitle {
+  margin: 6px 0 8px;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.attr {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 3px 0;
+}
+
+.attrLabel {
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  width: 130px;
+  flex-shrink: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.attrBarWrap {
+  flex: 1;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--bg-alt);
+  overflow: hidden;
+  min-width: 0;
+}
+
+.attrBar {
+  height: 100%;
+  border-radius: 999px;
+}
+
+.attrVal {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+  width: 22px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+@media (max-width: 620px) {
+  .body {
+    grid-template-columns: 1fr;
+  }
+  .name {
+    font-size: 24px;
+  }
+}
