@@ -42,7 +42,7 @@ const OFF = new Set(['QB', 'HB', 'FB', 'WR', 'TE', 'LT', 'LG', 'C', 'RG', 'RT'])
 const DEF = new Set(['LE', 'RE', 'DT', 'MLB', 'ROLB', 'LOLB', 'CB', 'FS', 'SS'])
 
 const playerRe =
-  /"firstName":"(.*?)","lastName":"(.*?)","number":(\d+),.*?"POS":"(.*?)","OVR":(\d+),"playerProfile":\{[^}]*\},"SPD":(\d+)/g
+  /"firstName":"(.*?)","lastName":"(.*?)","number":(\d+),.*?"POS":"(.*?)","OVR":(\d+),.*?"SPD":(\d+)/g
 const teamRe = /"offenseOVR":(\d+),"defenseOVR":(\d+),"specialTeamsOVR":(\d+),"teamOVR":(\d+)/
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
