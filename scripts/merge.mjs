@@ -46,13 +46,20 @@ const FIELD_ORDER = [
 
 const j = (v) => JSON.stringify(v)
 const plist = (arr) =>
-  '[' + arr.map((p) => `{ name: ${j(p.name)}, pos: ${j(p.pos)}, ovr: ${p.ovr} }`).join(', ') + ']'
+  '[' +
+  arr.map((p) => `{ name: ${j(p.name)}, pos: ${j(p.pos)}, ovr: ${p.ovr}, yr: ${j(p.yr)} }`).join(', ') +
+  ']'
 const slist = (arr) =>
-  '[' + arr.map((p) => `{ name: ${j(p.name)}, pos: ${j(p.pos)}, spd: ${p.spd} }`).join(', ') + ']'
+  '[' +
+  arr.map((p) => `{ name: ${j(p.name)}, pos: ${j(p.pos)}, spd: ${p.spd}, yr: ${j(p.yr)} }`).join(', ') +
+  ']'
 const rlist = (arr) =>
   '[\n' +
   arr
-    .map((p) => `      { name: ${j(p.name)}, pos: ${j(p.pos)}, ovr: ${p.ovr}, num: ${p.num} }`)
+    .map(
+      (p) =>
+        `      { name: ${j(p.name)}, pos: ${j(p.pos)}, ovr: ${p.ovr}, num: ${p.num}, yr: ${j(p.yr)} }`,
+    )
     .join(',\n') +
   '\n    ]'
 
@@ -74,6 +81,7 @@ const header = `export interface Player {
   ovr?: number
   num?: number
   spd?: number
+  yr?: string
 }
 
 export interface School {

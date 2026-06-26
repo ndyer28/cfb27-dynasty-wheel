@@ -125,6 +125,7 @@ export function ResultModal({ school, onClose, onRespin }: ResultModalProps) {
                       <li key={`${p.name}-${p.pos}`} className={styles.player}>
                         <span className={styles.playerPos}>{p.pos}</span>
                         <span className={styles.playerName}>{p.name}</span>
+                        <span className={styles.playerYr}>{p.yr}</span>
                         <span className={styles.playerSpd}>
                           {p.spd} <small>SPD</small>
                         </span>
@@ -211,6 +212,7 @@ function FullRoster({ school, onBack }: { school: School; onBack: () => void }) 
                     <span className={styles.playerNum}>#{p.num}</span>
                     <span className={styles.playerPos}>{p.pos}</span>
                     <span className={styles.playerName}>{p.name}</span>
+                    <span className={styles.playerYr}>{p.yr}</span>
                     <span className={styles.playerOvr}>{p.ovr}</span>
                   </li>
                 ))}
@@ -232,6 +234,7 @@ function RosterCol({ title, players }: { title: string; players: Player[] }) {
           <li key={`${p.name}-${p.pos}`} className={styles.player}>
             <span className={styles.playerPos}>{p.pos}</span>
             <span className={styles.playerName}>{p.name}</span>
+            <span className={styles.playerYr}>{p.yr}</span>
             <span className={styles.playerOvr}>{p.ovr}</span>
           </li>
         ))}

@@ -41,12 +41,14 @@ const IDS = {
 const OFF = new Set(['QB', 'HB', 'FB', 'WR', 'TE', 'LT', 'LG', 'C', 'RG', 'RT'])
 const DEF = new Set(['LE', 'RE', 'DT', 'MLB', 'ROLB', 'LOLB', 'CB', 'FS', 'SS'])
 
-// group4 = the chunk between number and POS (holds "class" when present)
+// group4 = chunk between number and POS (holds "class"); group7 = chunk between
+// OVR and SPD (holds playerProfile with "redshirt").
 const playerRe =
-  /"firstName":"(.*?)","lastName":"(.*?)","number":(\d+),(.*?)"POS":"(.*?)","OVR":(\d+),.*?"SPD":(\d+)/g
+  /"firstName":"(.*?)","lastName":"(.*?)","number":(\d+),(.*?)"POS":"(.*?)","OVR":(\d+),(.*?)"SPD":(\d+)/g
 
 // Players still on the roster over the next two seasons (2-year outlook).
 const YOUNG = new Set(['Freshman', 'Sophomore'])
+const CLASS_ABBR = { Freshman: 'FR', Sophomore: 'SO', Junior: 'JR', Senior: 'SR' }
 const teamRe = /"offenseOVR":(\d+),"defenseOVR":(\d+),"specialTeamsOVR":(\d+),"teamOVR":(\d+)/
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
@@ -74,12 +76,14 @@ async function scrapeOne(name, id) {
   const seen = new Set()
   const players = []
   for (const m of html.matchAll(playerRe)) {
-    const [, first, last, num, middle, pos, ovr, spd] = m
+    const [, first, last, num, middle, pos, ovr, prof, spd] = m
     const key = `${first} ${last} ${num} ${pos}`
     if (seen.has(key)) continue
     seen.add(key)
     const cls = (middle.match(/"class":"(.*?)"/) || [])[1] || 'Senior'
-    players.push({ name: `${first} ${last}`.trim(), pos, ovr: +ovr, num: +num, spd: +spd, cls })
+    const rs = /"redshirt":true/.test(prof)
+    const yr = (rs ? 'RS ' : '') + (CLASS_ABBR[cls] || cls)
+    players.push({ name: `${first} ${last}`.trim(), pos, ovr: +ovr, num: +num, spd: +spd, cls, yr })
   }
 
   // 2-year roster outlook: share of total OVR from players who remain (Fr/So).
@@ -92,18 +96,18 @@ async function scrapeOne(name, id) {
       .filter((p) => set.has(p.pos))
       .sort((a, b) => b.ovr - a.ovr || a.name.localeCompare(b.name))
       .slice(0, 5)
-      .map(({ name, pos, ovr }) => ({ name, pos, ovr }))
+      .map(({ name, pos, ovr, yr }) => ({ name, pos, ovr, yr }))
 
   const topSpeed = players
     .slice()
     .sort((a, b) => b.spd - a.spd || b.ovr - a.ovr || a.name.localeCompare(b.name))
     .slice(0, 5)
-    .map(({ name, pos, spd }) => ({ name, pos, spd }))
+    .map(({ name, pos, spd, yr }) => ({ name, pos, spd, yr }))
 
   const roster = players
     .slice()
     .sort((a, b) => b.ovr - a.ovr || a.name.localeCompare(b.name))
-    .map(({ name, pos, ovr, num }) => ({ name, pos, ovr, num }))
+    .map(({ name, pos, ovr, num, yr }) => ({ name, pos, ovr, num, yr }))
 
   return {
     ...team,

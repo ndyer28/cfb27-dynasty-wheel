@@ -308,6 +308,18 @@
   flex-shrink: 0;
 }
 
+.playerYr {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  padding: 2px 5px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
 .playerSpd {
   font-size: 13px;
   font-weight: 700;
