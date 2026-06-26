@@ -93,7 +93,7 @@ export default function App() {
 
   const presets: Preset[] = [
     {
-      label: 'Blue bloods (5★)',
+      label: 'Blue Bloods',
       apply: () => {
         setConferences(new Set())
         setMinStars(5)
@@ -112,7 +112,7 @@ export default function App() {
       },
     },
     {
-      label: 'Group of 5 grind',
+      label: 'Group of 5',
       apply: () => {
         setConferences(new Set(['American', 'CUSA', 'MAC', 'Mountain West', 'Sun Belt', 'Pac-12', 'Independent']))
         setMinStars(0.5)
@@ -121,7 +121,7 @@ export default function App() {
       },
     },
     {
-      label: 'Rebuild (≤2★)',
+      label: 'Rebuild',
       apply: () => {
         setConferences(new Set())
         setMinStars(0.5)
@@ -131,7 +131,7 @@ export default function App() {
       },
     },
     {
-      label: 'Underdog odds',
+      label: 'Underdogs',
       apply: () => {
         setConferences(new Set())
         setMinStars(0.5)
