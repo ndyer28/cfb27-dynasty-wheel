@@ -93,7 +93,7 @@ export default function App() {
 
   const presets: Preset[] = [
     {
-      label: '⭐ Blue bloods (5★)',
+      label: 'Blue bloods (5★)',
       apply: () => {
         setConferences(new Set())
         setMinStars(5)
@@ -146,7 +146,6 @@ export default function App() {
     <div className={styles.app}>
       <header className={styles.header}>
         <div className={styles.brand}>
-          <span className={styles.logo}>🏈</span>
           <div>
             <h1>Dynasty Wheel</h1>
             <p>EA College Football 27 · pick your team, start your dynasty</p>
