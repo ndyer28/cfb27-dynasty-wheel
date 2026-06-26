@@ -17,11 +17,12 @@ let missing = []
 for (const s of schools) {
   const p = players[s.name]
   if (!p) {
+    // Preserve any existing data; only ensure new fields exist.
     missing.push(s.name)
-    s.topOffense = []
-    s.topDefense = []
-    s.topSpeed = []
-    s.roster = []
+    s.topOffense = s.topOffense || []
+    s.topDefense = s.topDefense || []
+    s.topSpeed = s.topSpeed || []
+    s.roster = s.roster || []
     continue
   }
   s.ovr = p.ovr

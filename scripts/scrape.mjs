@@ -45,11 +45,20 @@ const playerRe =
   /"firstName":"(.*?)","lastName":"(.*?)","number":(\d+),.*?"POS":"(.*?)","OVR":(\d+),"playerProfile":\{[^}]*\},"SPD":(\d+)/g
 const teamRe = /"offenseOVR":(\d+),"defenseOVR":(\d+),"specialTeamsOVR":(\d+),"teamOVR":(\d+)/
 
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
+
 async function scrapeOne(name, id) {
   const url = `https://www.teamcrafters.net/rosters/CFB27/launch-ratings/${id}`
-  const res = await fetch(url)
-  if (!res.ok) throw new Error(`${name} ${id} -> HTTP ${res.status}`)
-  const html = (await res.text()).replace(/\\"/g, '"')
+  let html
+  for (let attempt = 1; ; attempt++) {
+    const res = await fetch(url)
+    if (res.ok) {
+      html = (await res.text()).replace(/\\"/g, '"')
+      break
+    }
+    if (attempt >= 8) throw new Error(`${name} ${id} -> HTTP ${res.status}`)
+    await sleep(1200 * attempt) // back off on rate limiting
+  }
 
   const tm = html.match(teamRe)
   const team = tm
@@ -97,7 +106,7 @@ async function scrapeOne(name, id) {
 async function run() {
   const entries = Object.entries(IDS)
   const out = {}
-  const CONCURRENCY = 8
+  const CONCURRENCY = 2
   let i = 0
   let failures = []
 
