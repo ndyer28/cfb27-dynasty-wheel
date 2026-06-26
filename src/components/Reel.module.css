@@ -1,0 +1,97 @@
+.machine {
+  width: min(440px, 90vw);
+  margin: 0 auto;
+}
+
+.window {
+  position: relative;
+  border-radius: 18px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  overflow: hidden;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.12);
+  -webkit-mask-image: linear-gradient(180deg, transparent, #000 16%, #000 84%, transparent);
+  mask-image: linear-gradient(180deg, transparent, #000 16%, #000 84%, transparent);
+}
+
+.reel {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  will-change: transform;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 18px;
+  box-sizing: border-box;
+}
+
+.swatch {
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  border: 2px solid;
+  flex-shrink: 0;
+}
+
+.abbr {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 15px;
+  width: 56px;
+  color: var(--ink-soft);
+  flex-shrink: 0;
+}
+
+.name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 23px;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  color: var(--ink);
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ovr {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 24px;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+.band {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 2px solid var(--accent);
+  border-bottom: 2px solid var(--accent);
+  background: rgba(0, 113, 227, 0.08);
+  pointer-events: none;
+}
+
+.markerL,
+.markerR {
+  position: absolute;
+  transform: translateY(-50%);
+  color: var(--accent);
+  font-size: 14px;
+  pointer-events: none;
+}
+
+.markerL {
+  left: 6px;
+}
+
+.markerR {
+  right: 6px;
+}

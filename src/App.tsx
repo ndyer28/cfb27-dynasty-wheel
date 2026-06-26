@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { SCHOOLS, type School } from './data/schools'
 import { buildSlices, pickWeightedIndex, type WeightMode } from './utils/wheel'
 import { Wheel } from './components/Wheel'
+import { Reel } from './components/Reel'
 import { FilterPanel, type Preset } from './components/FilterPanel'
 import { ResultModal } from './components/ResultModal'
 import { HistoryList, type HistoryEntry } from './components/HistoryList'
@@ -12,6 +13,9 @@ const SPIN_MS = 5200
 const EXTRA_TURNS = 6
 const POINTER_DEG = 270 // 12 o'clock in the wheel's coordinate system
 const HISTORY_KEY = 'cfb27-wheel-history'
+const PICKER_KEY = 'cfb27-picker-mode'
+
+type PickerMode = 'wheel' | 'reel'
 
 export default function App() {
   const [conferences, setConferences] = useState<Set<string>>(new Set())
@@ -20,8 +24,12 @@ export default function App() {
   const [mode, setMode] = useState<WeightMode>('equal')
   const [search, setSearch] = useState('')
 
+  const [picker, setPicker] = useState<PickerMode>(
+    () => (localStorage.getItem(PICKER_KEY) as PickerMode) || 'wheel',
+  )
   const [rotation, setRotation] = useState(0)
   const [spinning, setSpinning] = useState(false)
+  const [reelToken, setReelToken] = useState(0)
   const [winner, setWinner] = useState<School | null>(null)
   const [modalOpen, setModalOpen] = useState(false)
   const [history, setHistory] = useState<HistoryEntry[]>(() => loadHistory())
@@ -31,6 +39,10 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem(HISTORY_KEY, JSON.stringify(history))
   }, [history])
+
+  useEffect(() => {
+    localStorage.setItem(PICKER_KEY, picker)
+  }, [picker])
 
   const pool = useMemo(() => {
     const q = search.trim().toLowerCase()
@@ -44,8 +56,23 @@ export default function App() {
 
   const slices = useMemo(() => buildSlices(pool, mode), [pool, mode])
 
+  function commitWinner(w: School) {
+    setWinner(w)
+    setModalOpen(true)
+    setHistory((h) => [{ school: w, at: Date.now() }, ...h].slice(0, 30))
+  }
+
   function spin() {
     if (spinning || slices.length === 0) return
+    setWinner(null)
+    setModalOpen(false)
+    setSpinning(true)
+
+    if (picker === 'reel') {
+      setReelToken((t) => t + 1)
+      return
+    }
+
     const idx = pickWeightedIndex(slices)
     const slice = slices[idx]
     pendingWinner.current = slice.school
@@ -60,19 +87,18 @@ export default function App() {
     const delta = ((base - currentMod) % 360 + 360) % 360
     const target = rotation + delta + EXTRA_TURNS * 360
 
-    setWinner(null)
-    setModalOpen(false)
-    setSpinning(true)
     setRotation(target)
   }
 
   function onSpinEnd() {
     setSpinning(false)
     const w = pendingWinner.current
-    if (!w) return
-    setWinner(w)
-    setModalOpen(true)
-    setHistory((h) => [{ school: w, at: Date.now() }, ...h].slice(0, 30))
+    if (w) commitWinner(w)
+  }
+
+  function onReelLand(w: School) {
+    setSpinning(false)
+    commitWinner(w)
   }
 
   function toggleConference(c: string) {
@@ -178,12 +204,31 @@ export default function App() {
         />
 
         <section className={styles.stage}>
+          <div className={styles.modeToggle} role="tablist" aria-label="Picker style">
+            <button
+              className={picker === 'wheel' ? styles.modeOn : styles.modeOff}
+              onClick={() => !spinning && setPicker('wheel')}
+              role="tab"
+              aria-selected={picker === 'wheel'}
+            >
+              Wheel
+            </button>
+            <button
+              className={picker === 'reel' ? styles.modeOn : styles.modeOff}
+              onClick={() => !spinning && setPicker('reel')}
+              role="tab"
+              aria-selected={picker === 'reel'}
+            >
+              Slot reel
+            </button>
+          </div>
+
           {slices.length === 0 ? (
             <div className={styles.empty}>
               <h3>No teams match your filters</h3>
-              <p>Loosen the star range or conference selection to fill the wheel.</p>
+              <p>Loosen the star range or conference selection to fill the picker.</p>
             </div>
-          ) : (
+          ) : picker === 'wheel' ? (
             <Wheel
               slices={slices}
               rotation={rotation}
@@ -191,6 +236,8 @@ export default function App() {
               spinDurationMs={SPIN_MS}
               onSpinEnd={onSpinEnd}
             />
+          ) : (
+            <Reel pool={pool} mode={mode} spinToken={reelToken} onLand={onReelLand} />
           )}
 
           <button
@@ -198,7 +245,11 @@ export default function App() {
             onClick={spin}
             disabled={spinning || slices.length === 0}
           >
-            {spinning ? 'Spinning…' : slices.length === 1 ? 'Reveal team' : `Spin the wheel · ${pool.length} teams`}
+            {spinning
+              ? 'Spinning…'
+              : slices.length === 1
+                ? 'Reveal team'
+                : `${picker === 'reel' ? 'Spin the reel' : 'Spin the wheel'} · ${pool.length} teams`}
           </button>
 
           {winner && !modalOpen && (

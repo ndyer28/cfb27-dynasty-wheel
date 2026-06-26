@@ -85,6 +85,40 @@
   padding: 24px 0;
 }
 
+.modeToggle {
+  display: inline-flex;
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-radius: 980px;
+  padding: 3px;
+  gap: 2px;
+}
+
+.modeOn,
+.modeOff {
+  border: none;
+  border-radius: 980px;
+  padding: 7px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.modeOn {
+  background: var(--accent);
+  color: #fff;
+}
+
+.modeOff {
+  background: transparent;
+  color: var(--ink-soft);
+}
+
+.modeOff:hover {
+  color: var(--ink);
+}
+
 .spinBtn {
   background: var(--accent);
   color: #fff;
