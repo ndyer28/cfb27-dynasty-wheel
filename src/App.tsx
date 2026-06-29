@@ -22,7 +22,7 @@ type PickerMode = 'wheel' | 'reel'
 type Tab = 'picker' | 'players' | 'ratings'
 
 const TABS: { id: Tab; label: string }[] = [
-  { id: 'picker', label: 'Slot Wheel' },
+  { id: 'picker', label: 'Team Selector' },
   { id: 'players', label: 'Player Search' },
   { id: 'ratings', label: 'Overall Ratings' },
 ]
