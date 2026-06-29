@@ -16,8 +16,16 @@ const EXTRA_TURNS = 6
 const POINTER_DEG = 270 // 12 o'clock in the wheel's coordinate system
 const HISTORY_KEY = 'cfb27-wheel-history'
 const PICKER_KEY = 'cfb27-picker-mode'
+const TAB_KEY = 'cfb27-tab'
 
 type PickerMode = 'wheel' | 'reel'
+type Tab = 'picker' | 'players' | 'ratings'
+
+const TABS: { id: Tab; label: string }[] = [
+  { id: 'picker', label: 'Slot Wheel' },
+  { id: 'players', label: 'Player Search' },
+  { id: 'ratings', label: 'Overall Ratings' },
+]
 
 export default function App() {
   const [conferences, setConferences] = useState<Set<string>>(new Set())
@@ -31,6 +39,7 @@ export default function App() {
   const [picker, setPicker] = useState<PickerMode>(
     () => (localStorage.getItem(PICKER_KEY) as PickerMode) || 'reel',
   )
+  const [tab, setTab] = useState<Tab>(() => (localStorage.getItem(TAB_KEY) as Tab) || 'picker')
   const [rotation, setRotation] = useState(0)
   const [spinning, setSpinning] = useState(false)
   const [reelToken, setReelToken] = useState(0)
@@ -47,6 +56,10 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem(PICKER_KEY, picker)
   }, [picker])
+
+  useEffect(() => {
+    localStorage.setItem(TAB_KEY, tab)
+  }, [tab])
 
   const pool = useMemo(() => {
     // A specific-team selection overrides the filters entirely.
@@ -198,6 +211,21 @@ export default function App() {
         </div>
       </header>
 
+      <nav className={styles.tabs} role="tablist" aria-label="Pages">
+        {TABS.map((t) => (
+          <button
+            key={t.id}
+            className={tab === t.id ? styles.tabOn : styles.tab}
+            onClick={() => setTab(t.id)}
+            role="tab"
+            aria-selected={tab === t.id}
+          >
+            {t.label}
+          </button>
+        ))}
+      </nav>
+
+      {tab === 'picker' && (
       <main className={styles.layout}>
         <FilterPanel
           conferences={conferences}
@@ -286,15 +314,20 @@ export default function App() {
           onClear={() => setHistory([])}
         />
       </main>
+      )}
 
-      <PlayerFinder onOpenPlayer={(pid, accent) => setPlayerView({ pid, accent })} />
+      {tab === 'players' && (
+        <PlayerFinder onOpenPlayer={(pid, accent) => setPlayerView({ pid, accent })} />
+      )}
 
-      <BrowsePanel
-        onPick={(s) => {
-          setWinner(s)
-          setModalOpen(true)
-        }}
-      />
+      {tab === 'ratings' && (
+        <BrowsePanel
+          onPick={(s) => {
+            setWinner(s)
+            setModalOpen(true)
+          }}
+        />
+      )}
 
       {modalOpen && (
         <ResultModal
