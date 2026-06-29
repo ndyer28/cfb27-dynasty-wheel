@@ -16,8 +16,6 @@ interface FilterPanelProps {
   setStarRange: (min: number, max: number) => void
   mode: WeightMode
   setMode: (m: WeightMode) => void
-  search: string
-  setSearch: (s: string) => void
   presets: Preset[]
   poolCount: number
   totalCount: number
@@ -45,8 +43,6 @@ export function FilterPanel(props: FilterPanelProps) {
     setStarRange,
     mode,
     setMode,
-    search,
-    setSearch,
     presets,
     poolCount,
     totalCount,
@@ -125,17 +121,6 @@ export function FilterPanel(props: FilterPanelProps) {
             </div>
           </>
         )}
-      </section>
-
-      <section className={styles.section}>
-        <label className={styles.label}>Search</label>
-        <input
-          className={styles.search}
-          type="text"
-          placeholder="Filter by team name…"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
       </section>
 
       <section className={styles.section}>

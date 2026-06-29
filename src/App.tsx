@@ -32,7 +32,6 @@ export default function App() {
   const [minStars, setMinStars] = useState(0.5)
   const [maxStars, setMaxStars] = useState(5)
   const [mode, setMode] = useState<WeightMode>('equal')
-  const [search, setSearch] = useState('')
   const [includedTeams, setIncludedTeams] = useState<Set<string>>(new Set())
   const [playerView, setPlayerView] = useState<{ pid: number; accent: string } | null>(null)
 
@@ -64,14 +63,12 @@ export default function App() {
   const pool = useMemo(() => {
     // A specific-team selection overrides the filters entirely.
     if (includedTeams.size > 0) return SCHOOLS.filter((s) => includedTeams.has(s.name))
-    const q = search.trim().toLowerCase()
     return SCHOOLS.filter((s) => {
       if (conferences.size > 0 && !conferences.has(s.conference)) return false
       if (s.stars < minStars || s.stars > maxStars) return false
-      if (q && !s.name.toLowerCase().includes(q) && !s.abbr.toLowerCase().includes(q)) return false
       return true
     })
-  }, [conferences, minStars, maxStars, search, includedTeams])
+  }, [conferences, minStars, maxStars, includedTeams])
 
   const slices = useMemo(() => buildSlices(pool, mode), [pool, mode])
 
@@ -140,7 +137,6 @@ export default function App() {
     setConferences(new Set())
     setMinStars(0.5)
     setMaxStars(5)
-    setSearch('')
     setMode('equal')
     setIncludedTeams(new Set())
   }
@@ -153,7 +149,6 @@ export default function App() {
         setMinStars(5)
         setMaxStars(5)
         setMode('equal')
-        setSearch('')
       },
     },
     {
@@ -162,7 +157,6 @@ export default function App() {
         setConferences(new Set(['SEC', 'Big Ten', 'ACC', 'Big 12']))
         setMinStars(0.5)
         setMaxStars(5)
-        setSearch('')
       },
     },
     {
@@ -171,7 +165,6 @@ export default function App() {
         setConferences(new Set(['American', 'CUSA', 'MAC', 'Mountain West', 'Sun Belt', 'Pac-12', 'Independent']))
         setMinStars(0.5)
         setMaxStars(5)
-        setSearch('')
       },
     },
     {
@@ -181,7 +174,6 @@ export default function App() {
         setMinStars(0.5)
         setMaxStars(2)
         setMode('equal')
-        setSearch('')
       },
     },
     {
@@ -191,7 +183,6 @@ export default function App() {
         setMinStars(0.5)
         setMaxStars(5)
         setMode('underdog')
-        setSearch('')
       },
     },
   ]
@@ -238,8 +229,6 @@ export default function App() {
           }}
           mode={mode}
           setMode={setMode}
-          search={search}
-          setSearch={setSearch}
           presets={presets}
           poolCount={pool.length}
           totalCount={SCHOOLS.length}
