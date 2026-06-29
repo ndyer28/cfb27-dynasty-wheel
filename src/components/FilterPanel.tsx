@@ -1,4 +1,5 @@
-import { CONFERENCES } from '../data/schools'
+import { useMemo, useState } from 'react'
+import { CONFERENCES, SCHOOLS } from '../data/schools'
 import type { WeightMode } from '../utils/wheel'
 import styles from './FilterPanel.module.css'
 
@@ -21,7 +22,12 @@ interface FilterPanelProps {
   poolCount: number
   totalCount: number
   onReset: () => void
+  includedTeams: Set<string>
+  toggleTeam: (name: string) => void
+  clearTeams: () => void
 }
+
+const ALL_TEAMS = SCHOOLS.map((s) => s.name).sort()
 
 const STAR_VALUES = [0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5]
 const MODE_LABELS: Record<WeightMode, string> = {
@@ -45,7 +51,17 @@ export function FilterPanel(props: FilterPanelProps) {
     poolCount,
     totalCount,
     onReset,
+    includedTeams,
+    toggleTeam,
+    clearTeams,
   } = props
+
+  const [teamsOpen, setTeamsOpen] = useState(false)
+  const [teamQuery, setTeamQuery] = useState('')
+  const teamList = useMemo(() => {
+    const q = teamQuery.trim().toLowerCase()
+    return q ? ALL_TEAMS.filter((n) => n.toLowerCase().includes(q)) : ALL_TEAMS
+  }, [teamQuery])
 
   return (
     <aside className={styles.panel}>
@@ -65,6 +81,50 @@ export function FilterPanel(props: FilterPanelProps) {
             </button>
           ))}
         </div>
+      </section>
+
+      <section className={styles.section}>
+        <div className={styles.confHead}>
+          <label className={styles.label}>Specific teams</label>
+          <button className={styles.teamsToggle} onClick={() => setTeamsOpen((o) => !o)}>
+            {includedTeams.size > 0 ? `${includedTeams.size} selected` : teamsOpen ? 'Hide' : 'Choose'}
+          </button>
+        </div>
+        {includedTeams.size > 0 && (
+          <p className={styles.hint}>
+            Using only your {includedTeams.size} picked team{includedTeams.size === 1 ? '' : 's'} —
+            filters below are ignored.{' '}
+            <button className={styles.clearLink} onClick={clearTeams}>
+              clear
+            </button>
+          </p>
+        )}
+        {teamsOpen && (
+          <>
+            <input
+              className={styles.search}
+              type="text"
+              placeholder="Find a team…"
+              value={teamQuery}
+              onChange={(e) => setTeamQuery(e.target.value)}
+            />
+            <div className={styles.teamList}>
+              {teamList.map((n) => {
+                const on = includedTeams.has(n)
+                return (
+                  <button
+                    key={n}
+                    className={`${styles.teamItem} ${on ? styles.teamItemOn : ''}`}
+                    onClick={() => toggleTeam(n)}
+                  >
+                    <span className={styles.teamCheck}>{on ? '✓' : ''}</span>
+                    {n}
+                  </button>
+                )
+              })}
+            </div>
+          </>
+        )}
       </section>
 
       <section className={styles.section}>

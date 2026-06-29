@@ -51,7 +51,11 @@ for (const s of SCHOOLS) {
   s.roster = players
     .slice()
     .sort((a, b) => b.ovr - a.ovr || a.name.localeCompare(b.name))
-    .map((p) => ({ name: p.name, pos: p.pos, ovr: p.ovr, num: p.num, yr: p.yr, pid: p.pid }))
+    .map((p) => ({
+      name: p.name, pos: p.pos, ovr: p.ovr, num: p.num, yr: p.yr, pid: p.pid,
+      spd: p.attrs.speed ?? 0, tp: p.attrs.throwPower ?? 0,
+      str: p.attrs.strength ?? 0, tkl: p.attrs.tackle ?? 0,
+    }))
 
   // full detail records
   for (const p of players) {
@@ -77,7 +81,7 @@ const pl = (a) =>
 const sl = (a) =>
   '[' + a.map((p) => `{ name: ${j(p.name)}, pos: ${j(p.pos)}, spd: ${p.spd}, yr: ${j(p.yr)}, pid: ${p.pid} }`).join(', ') + ']'
 const rl = (a) =>
-  '[\n' + a.map((p) => `      { name: ${j(p.name)}, pos: ${j(p.pos)}, ovr: ${p.ovr}, num: ${p.num}, yr: ${j(p.yr)}, pid: ${p.pid} }`).join(',\n') + '\n    ]'
+  '[\n' + a.map((p) => `      { name: ${j(p.name)}, pos: ${j(p.pos)}, ovr: ${p.ovr}, num: ${p.num}, yr: ${j(p.yr)}, pid: ${p.pid}, spd: ${p.spd}, tp: ${p.tp}, str: ${p.str}, tkl: ${p.tkl} }`).join(',\n') + '\n    ]'
 
 function emit(s) {
   const parts = []
@@ -99,6 +103,9 @@ const header = `export interface Player {
   spd?: number
   yr?: string
   pid?: number
+  tp?: number
+  str?: number
+  tkl?: number
 }
 
 export interface School {

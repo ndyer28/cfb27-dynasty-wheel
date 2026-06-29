@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import type { School, Player } from '../data/schools'
 import { readableText } from '../utils/wheel'
 import { rebuildDifficulty } from '../utils/rebuild'
-import { PlayerModal } from './PlayerModal'
 import styles from './ResultModal.module.css'
 
 const POSITION_GROUPS: { label: string; pos: string[] }[] = [
@@ -21,6 +20,7 @@ interface ResultModalProps {
   school: School | null
   onClose: () => void
   onRespin: () => void
+  onOpenPlayer: (pid: number, accent: string) => void
 }
 
 function Stars({ value }: { value: number }) {
@@ -51,16 +51,14 @@ function Rating({ label, value }: { label: string; value: number }) {
   )
 }
 
-export function ResultModal({ school, onClose, onRespin }: ResultModalProps) {
+export function ResultModal({ school, onClose, onRespin, onOpenPlayer }: ResultModalProps) {
   const [showFull, setShowFull] = useState(false)
-  const [playerPid, setPlayerPid] = useState<number | null>(null)
   useEffect(() => {
     setShowFull(false)
-    setPlayerPid(null)
   }, [school])
   if (!school) return null
   const txt = readableText(school.primaryColor)
-  const openPlayer = (pid?: number) => pid != null && setPlayerPid(pid)
+  const openPlayer = (pid?: number) => pid != null && onOpenPlayer(pid, school.primaryColor)
 
   return (
     <div className={styles.backdrop} onClick={onClose}>
@@ -163,8 +161,6 @@ export function ResultModal({ school, onClose, onRespin }: ResultModalProps) {
           </div>
         </div>
       </div>
-
-      <PlayerModal pid={playerPid} accent={school.primaryColor} onClose={() => setPlayerPid(null)} />
     </div>
   )
 }

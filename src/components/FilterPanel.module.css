@@ -175,6 +175,63 @@
   color: #fff;
 }
 
+.teamsToggle,
+.clearLink {
+  background: transparent;
+  border: none;
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0;
+}
+
+.teamsToggle:hover,
+.clearLink:hover {
+  text-decoration: underline;
+}
+
+.teamList {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  max-height: 240px;
+  overflow-y: auto;
+  margin-top: 8px;
+}
+
+.teamItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 7px 10px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink);
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.1s;
+}
+
+.teamItem:hover {
+  border-color: #b0b0b5;
+}
+
+.teamItemOn {
+  background: rgba(0, 113, 227, 0.08);
+  border-color: var(--accent);
+}
+
+.teamCheck {
+  width: 14px;
+  color: var(--accent);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
 .reset {
   background: transparent;
   border: none;

@@ -7,6 +7,8 @@ import { FilterPanel, type Preset } from './components/FilterPanel'
 import { ResultModal } from './components/ResultModal'
 import { HistoryList, type HistoryEntry } from './components/HistoryList'
 import { BrowsePanel } from './components/BrowsePanel'
+import { PlayerModal } from './components/PlayerModal'
+import { PlayerFinder } from './components/PlayerFinder'
 import styles from './App.module.css'
 
 const SPIN_MS = 5200
@@ -23,9 +25,11 @@ export default function App() {
   const [maxStars, setMaxStars] = useState(5)
   const [mode, setMode] = useState<WeightMode>('equal')
   const [search, setSearch] = useState('')
+  const [includedTeams, setIncludedTeams] = useState<Set<string>>(new Set())
+  const [playerView, setPlayerView] = useState<{ pid: number; accent: string } | null>(null)
 
   const [picker, setPicker] = useState<PickerMode>(
-    () => (localStorage.getItem(PICKER_KEY) as PickerMode) || 'wheel',
+    () => (localStorage.getItem(PICKER_KEY) as PickerMode) || 'reel',
   )
   const [rotation, setRotation] = useState(0)
   const [spinning, setSpinning] = useState(false)
@@ -45,6 +49,8 @@ export default function App() {
   }, [picker])
 
   const pool = useMemo(() => {
+    // A specific-team selection overrides the filters entirely.
+    if (includedTeams.size > 0) return SCHOOLS.filter((s) => includedTeams.has(s.name))
     const q = search.trim().toLowerCase()
     return SCHOOLS.filter((s) => {
       if (conferences.size > 0 && !conferences.has(s.conference)) return false
@@ -52,7 +58,7 @@ export default function App() {
       if (q && !s.name.toLowerCase().includes(q) && !s.abbr.toLowerCase().includes(q)) return false
       return true
     })
-  }, [conferences, minStars, maxStars, search])
+  }, [conferences, minStars, maxStars, search, includedTeams])
 
   const slices = useMemo(() => buildSlices(pool, mode), [pool, mode])
 
@@ -109,12 +115,21 @@ export default function App() {
     })
   }
 
+  function toggleTeam(name: string) {
+    setIncludedTeams((prev) => {
+      const next = new Set(prev)
+      next.has(name) ? next.delete(name) : next.add(name)
+      return next
+    })
+  }
+
   function resetFilters() {
     setConferences(new Set())
     setMinStars(0.5)
     setMaxStars(5)
     setSearch('')
     setMode('equal')
+    setIncludedTeams(new Set())
   }
 
   const presets: Preset[] = [
@@ -201,6 +216,9 @@ export default function App() {
           poolCount={pool.length}
           totalCount={SCHOOLS.length}
           onReset={resetFilters}
+          includedTeams={includedTeams}
+          toggleTeam={toggleTeam}
+          clearTeams={() => setIncludedTeams(new Set())}
         />
 
         <section className={styles.stage}>
@@ -269,6 +287,8 @@ export default function App() {
         />
       </main>
 
+      <PlayerFinder onOpenPlayer={(pid, accent) => setPlayerView({ pid, accent })} />
+
       <BrowsePanel
         onPick={(s) => {
           setWinner(s)
@@ -284,8 +304,15 @@ export default function App() {
             setModalOpen(false)
             spin()
           }}
+          onOpenPlayer={(pid, accent) => setPlayerView({ pid, accent })}
         />
       )}
+
+      <PlayerModal
+        pid={playerView?.pid ?? null}
+        accent={playerView?.accent ?? 'var(--accent)'}
+        onClose={() => setPlayerView(null)}
+      />
     </div>
   )
 }

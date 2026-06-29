@@ -6,8 +6,8 @@ import styles from './Reel.module.css'
 const ROW = 56
 const WINDOW = 308
 const CENTER = WINDOW / 2 - ROW / 2
-const STRIP_LEN = 48
-const TARGET = STRIP_LEN - 4 // winner index; leaves rows below for centering
+const MIN_ROWS = 80 // ensures a long, fast roll even for small filtered pools
+const TAIL = 4 // rows kept after the winner so it can center
 
 interface ReelProps {
   pool: School[]
@@ -21,16 +21,30 @@ function weightedPick(pool: School[], mode: WeightMode): School {
   return slices[pickWeightedIndex(slices)].school
 }
 
-function buildStrip(pool: School[], winner: School | null): School[] {
-  const strip: School[] = []
-  for (let i = 0; i < STRIP_LEN; i++) strip.push(pool[Math.floor(Math.random() * pool.length)])
-  if (winner) strip[TARGET] = winner
-  return strip
+function shuffle<T>(arr: T[]): T[] {
+  const a = arr.slice()
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[a[i], a[j]] = [a[j], a[i]]
+  }
+  return a
+}
+
+// Strip = the whole pool shuffled (every team rolls through at least once),
+// repeated enough to stay long for small pools. Winner sits near the end.
+function buildStrip(pool: School[], winner: School | null): { rows: School[]; target: number } {
+  const reps = Math.max(1, Math.ceil(MIN_ROWS / Math.max(1, pool.length)))
+  let rows: School[] = []
+  for (let r = 0; r < reps; r++) rows = rows.concat(shuffle(pool))
+  const target = rows.length - TAIL
+  if (winner) rows[target] = winner
+  return { rows, target }
 }
 
 export function Reel({ pool, mode, spinToken, onLand }: ReelProps) {
   const reelRef = useRef<HTMLDivElement>(null)
-  const [strip, setStrip] = useState<School[]>(() => buildStrip(pool, null))
+  const [strip, setStrip] = useState<School[]>(() => buildStrip(pool, null).rows)
+  const targetRef = useRef(0)
   const pendingWinner = useRef<School | null>(null)
   const onLandRef = useRef(onLand)
   onLandRef.current = onLand
@@ -45,7 +59,9 @@ export function Reel({ pool, mode, spinToken, onLand }: ReelProps) {
     if (spinToken === 0 || pool.length === 0) return
     const winner = weightedPick(pool, mode)
     pendingWinner.current = winner
-    setStrip(buildStrip(pool, winner))
+    const { rows, target } = buildStrip(pool, winner)
+    targetRef.current = target
+    setStrip(rows)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [spinToken])
 
@@ -57,20 +73,20 @@ export function Reel({ pool, mode, spinToken, onLand }: ReelProps) {
     const el = reelRef.current
     if (!el) return
 
-    place(el, 6, false) // jump near the top
+    place(el, 1, false) // start at the very top so it rolls through the whole pool
     void el.offsetHeight // force reflow
-    const exactY = CENTER - TARGET * ROW
+    const exactY = CENTER - targetRef.current * ROW
 
     requestAnimationFrame(() => {
-      el.style.transition = 'transform 3s cubic-bezier(0.1, 0.72, 0.12, 1)'
-      el.style.transform = `translateY(${exactY + 20}px)` // decelerate to just short
+      el.style.transition = 'transform 1.9s cubic-bezier(0.07, 0.8, 0.1, 1)'
+      el.style.transform = `translateY(${exactY + 18}px)` // fast roll, decelerate just short
     })
-    // magnetic snap: pull the last 20px to dead-center with a springy settle
+    // magnetic snap: pull the last 18px to dead-center with a springy settle
     const snap = setTimeout(() => {
-      el.style.transition = 'transform 0.36s cubic-bezier(0.34, 1.45, 0.5, 1)'
+      el.style.transition = 'transform 0.28s cubic-bezier(0.34, 1.5, 0.5, 1)'
       el.style.transform = `translateY(${exactY}px)`
-    }, 3000)
-    const land = setTimeout(() => onLandRef.current(winner), 3420)
+    }, 1900)
+    const land = setTimeout(() => onLandRef.current(winner), 2220)
     return () => {
       clearTimeout(snap)
       clearTimeout(land)
