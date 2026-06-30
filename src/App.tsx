@@ -193,7 +193,7 @@ export default function App() {
         <div className={styles.brand}>
           <div>
             <h1>CFB Dynasty Tools</h1>
-            <p>Choose your team. Start your Dynasty</p>
+            <p>Choose your team. Start your Dynasty.</p>
           </div>
         </div>
       </header>
