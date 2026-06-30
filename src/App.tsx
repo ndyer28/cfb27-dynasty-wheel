@@ -192,13 +192,9 @@ export default function App() {
       <header className={styles.header}>
         <div className={styles.brand}>
           <div>
-            <h1>Dynasty Wheel</h1>
-            <p>EA College Football 27 · pick your team, start your dynasty</p>
+            <h1>CFB Dynasty Tools</h1>
+            <p>Choose your team. Start your Dynasty</p>
           </div>
-        </div>
-        <div className={styles.headerStat}>
-          <strong>134</strong>
-          <span>FBS programs</span>
         </div>
       </header>
 
